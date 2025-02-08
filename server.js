@@ -27,12 +27,11 @@ app.use(cookieParser());
 
 
 app.use(cors({
-  origin: [
-   "https://roomease-theta.vercel.app/"   // Second frontend URL
-  ],
+  origin: 'https://roomease-theta.vercel.app', // Frontend URL
   credentials: true, // Allow cookies and authentication headers
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS','PATCH'], // Allow the necessary methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers (if needed)
 }));
-
 
 
 app.get('/health', (req, res) => {
