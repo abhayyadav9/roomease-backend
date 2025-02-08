@@ -26,12 +26,27 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 
+// Define allowed origins (replace with your frontend URLs)
+const allowedOrigins = [
+  'https://roomease-theta.vercel.app', // Your frontend URL
+  // You can add other frontend URLs if needed
+];
+
+// CORS configuration
 app.use(cors({
-  origin: '*', // Frontend URL
+  origin: function(origin, callback) {
+    // Allow requests from the frontend URL
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true); // Allow the origin
+    } else {
+      callback(new Error('Not allowed by CORS')); // Deny other origins
+    }
+  },
   credentials: true, // Allow cookies and authentication headers
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS','PATCH'], // Allow the necessary methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers (if needed)
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
 }));
+
 
 
 app.get('/health', (req, res) => {
