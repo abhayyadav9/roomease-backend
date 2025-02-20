@@ -26,7 +26,7 @@ app.use(cookieParser());
 
 // Define allowed origins (replace with your frontend URLs)
 const allowedOrigins = [
-  "https://roomease-theta.vercel.app",
+  "https://roomease-frontend-rl.vercel.app",
 
   "http://localhost:5173",
 ];
