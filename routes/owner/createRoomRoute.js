@@ -12,7 +12,7 @@ router.put("/edit/room/:id",isAuthenticated,uploadMultiple,editRoom);
 router.delete("/delete/room/:id",isAuthenticated,deleteRoom);
 
 //get all rooms
-router.get("/all/rooms",isAuthenticated,allRooms);
+router.get("/all/rooms",allRooms);
 
 
 export default router;
