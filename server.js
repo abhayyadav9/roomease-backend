@@ -10,7 +10,10 @@ import adminRoute from "./routes/admin/adminRoute.js";
 import createRoomRoute from "./routes/owner/createRoomRoute.js";
 import requirementRoute from "./routes/tenant/requirementRoute.js";
 import commonRoute from "./routes/admin/commonRoute.js";
-import { app, server } from "./socket/socket.js";
+
+
+
+const app = express();
 
 // Load environment variables
 dotenv.config();
@@ -59,7 +62,7 @@ app.use("/api/v3a", requirementRoute);
 connectDb()
   .then(() => {
     const PORT = process.env.PORT || 3000;
-    server.listen(PORT, () => {
+    app.listen(PORT, () => {
       console.log(`The server is running on port ${PORT}`);
     });
   })
