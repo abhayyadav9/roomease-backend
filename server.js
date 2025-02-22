@@ -1,8 +1,6 @@
-// filepath: /c:/Mycode/abhay  major project/RoomEase/Backend/server.js
+import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import express from "express";
-import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import connectDb from "./database/db.js";
 import userRoute from "./routes/authRoute/userRoute.js";
@@ -12,22 +10,18 @@ import adminRoute from "./routes/admin/adminRoute.js";
 import createRoomRoute from "./routes/owner/createRoomRoute.js";
 import requirementRoute from "./routes/tenant/requirementRoute.js";
 import commonRoute from "./routes/admin/commonRoute.js";
-
-const app = express();
+import { app, server } from "./socket/socket.js";
 
 // Load environment variables
 dotenv.config();
 
-// Middleware to parse JSON bodies
-app.use(bodyParser.json());
-
-// Middleware to parse cookies
-app.use(cookieParser());
+// Middleware
+app.use(express.json()); // Use Express built-in JSON parser
+app.use(cookieParser()); // Middleware to parse cookies
 
 // Define allowed origins (replace with your frontend URLs)
 const allowedOrigins = [
-  "https://roomease-frontend-7duq.vercel.app",
-
+  "https://roomease-frontend-rl.vercel.app",
   "http://localhost:5173",
 ];
 
@@ -41,38 +35,32 @@ app.use(
         callback(new Error(`Not allowed by CORS: ${origin}`));
       }
     },
-    credentials: true,
+    credentials: true, // Allow cookies
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-
+// Health Check Route
 app.get("/health", (req, res) => {
   res.status(200).json({ message: "Server is running" });
 });
 
 // Routes
 app.use("/api/v1", userRoute);
-
-//admin related api
 app.use("/api/v4", adminRoute);
-// analysis related api
 app.use("/api/v4a", commonRoute);
-
-//owner related api
 app.use("/api/v2", ownerRoute);
 app.use("/api/v2a", createRoomRoute);
-
-// tenant related api
 app.use("/api/v3", tenantRoute);
 app.use("/api/v3a", requirementRoute);
 
 // Connect to the database and start the server
 connectDb()
   .then(() => {
-    app.listen(3000, () => {
-      console.log("The server is running on port 3000");
+    const PORT = process.env.PORT || 3000;
+    server.listen(PORT, () => {
+      console.log(`The server is running on port ${PORT}`);
     });
   })
   .catch((error) => {
